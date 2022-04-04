@@ -1,5 +1,12 @@
 # Bellabeat-Case-Study
 
+## Introduction
+Bellabeat is a high-tech company that manufactures health-focused smart products. Bellabeat collects data on activity, sleep, stress, and reproductive health and uses these data to empower women with knowledge about their own health and habits.
+
+Here in this project, An analysis of the different datasets will be conducted and recommendation based on findings from the data will be presented.
+
+Tools like R and Tableau is used to perform different tasks of the project.
+
 install.packages("tidyverse")
 install.packages("sqldf")
 
@@ -175,7 +182,6 @@ final_activity_data a, dailySteps ds
 WHERE
 a.Date=ds.Date AND a.Id=ds.Id")
 
-
 final_activity_data<-sqldf("SELECT
 a.Id,
 a.Date,
@@ -213,3 +219,5 @@ WHERE
 a.Date=di.Date AND a.Id=di.Id")
 
 write.csv(final_activity_data,"D:\\final_activity_data.csv")
+
+![Dashboard bella](https://user-images.githubusercontent.com/53640666/161537430-e19cf027-58b7-4c34-8e63-0a24d755f41a.png)
