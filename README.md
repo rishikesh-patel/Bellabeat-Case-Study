@@ -7,6 +7,8 @@ Here in this project, An analysis of the different datasets will be conducted an
 
 Tools like R and Tableau is used to perform different tasks of the project.
 
+## Preparing Data for Analysis
+```
 install.packages("tidyverse")
 install.packages("sqldf")
 
@@ -15,57 +17,70 @@ library(tidyverse)
 library(sqldf)
 
 setwd("/Users/rkpre/Documents")
-
+```
+```
 #importing the datasets
 #DailyActivity Table
 dailyActivity <- read_csv("dailyActivity_merged.csv")
-head(dailyActivity)
-
-#Changing ActivityDate into Date
-dailyActivity<-rename(dailyActivity, Date = ActivityDate)
-
-#Sorting by Date
-dailyActivity<-dailyActivity[order(as.Date(dailyActivity$Date, format="%m/%d/%Y")),]
 head(dailyActivity)
 
 #SleepDay Table(separate time and date) 
 sleepDay<-read_csv("sleepDay_merged.csv")
 head(sleepDay)
 
-#Seperate Activity hour into date and time
-sleepDay<-separate(sleepDay,SleepDay,c("Date", "Time"),sep=" ")
-
-#Sorting by Date
-sleepDay<-sleepDay[order(as.Date(sleepDay$Date, format="%m/%d/%Y")),]
-head(sleepDay)
-
 #weightLogInfo Table(need to seperate date and time.)
 weightLogInfo<-read_csv("weightLogInfo_merged.csv")
 head(weightLogInfo)
 
-#Seperate Activity hour into date and time
-weightLogInfo<-separate(weightLogInfo,Date,c("Date", "Time"),sep=" ")
-
-#Sorting by Date
-weightLogInfo<-weightLogInfo[order(as.Date(weightLogInfo$Date, format="%m/%d/%Y")),]
-head(weightLogInfo)
-
-
 #dailyIntensities
 dailyIntensities <- read_csv("dailyIntensities_merged.csv")
-head(dailyIntensities)
-
-#Changing ActivityDate into Date
-dailyIntensities<-rename(dailyIntensities, Date = ActivityDay)
-
-#Sorting by Date
-dailyIntensities<-dailyIntensities[order(as.Date(dailyIntensities$Date, format="%m/%d/%Y")),]
 head(dailyIntensities)
 
 #dailySteps Table
 dailySteps <- read_csv("dailySteps_merged.csv")
 head(dailySteps)
 
+#dailyCalories Table
+dailyCalories <- read_csv("dailyCalories_merged.csv")
+head(dailyCalories)
+```
+
+## Processing and Analysis of Data
+Here, I will be transforming and organizing data by changing Date formate, seperating date and time, column name, Merging tables, extracting information and removing bad data and duplicates.
+```
+#Changing ActivityDate into Date
+dailyActivity<-rename(dailyActivity, Date = ActivityDate),
+
+#Sorting by Date
+dailyActivity<-dailyActivity[order(as.Date(dailyActivity$Date, format="%m/%d/%Y")),]
+head(dailyActivity)
+```
+```
+#Seperate Activity hour into date and time
+sleepDay<-separate(sleepDay,SleepDay,c("Date", "Time"),sep=" ")
+
+#Sorting by Date
+sleepDay<-sleepDay[order(as.Date(sleepDay$Date, format="%m/%d/%Y")),]
+head(sleepDay)
+```
+```
+#Seperate Activity hour into date and time
+weightLogInfo<-separate(weightLogInfo,Date,c("Date", "Time"),sep=" ")
+
+#Sorting by Date
+weightLogInfo<-weightLogInfo[order(as.Date(weightLogInfo$Date, format="%m/%d/%Y")),]
+head(weightLogInfo)
+```
+```
+#Changing ActivityDate into Date
+dailyIntensities<-rename(dailyIntensities, Date = ActivityDay)
+
+#Sorting by Date
+dailyIntensities<-dailyIntensities[order(as.Date(dailyIntensities$Date, format="%m/%d/%Y")),]
+head(dailyIntensities)
+````
+
+```
 #Changing ActivityDate into Date
 dailySteps<-rename(dailySteps, Date = ActivityDay)
 
@@ -74,11 +89,8 @@ head(dailySteps)
 #Sorting by Date
 dailySteps<-dailySteps[order(as.Date(dailySteps$Date, format = "%m/%d/%Y")),]
 head(dailySteps)
-
-#dailyCalories Table
-dailyCalories <- read_csv("dailyCalories_merged.csv")
-head(dailyCalories)
-
+```
+```
 #Changing ActivityDate into Date
 dailyCalories <- rename(dailyCalories, Date= ActivityDay)
 head(dailyCalories)
@@ -86,7 +98,9 @@ head(dailyCalories)
 #Sorting by Date
 dailyCalories <- dailyCalories[order(as.Date(dailyCalories$Date, format = "%m/%d/%Y")),]
 head(dailyCalories)
-
+```
+Checking and Replacing Null Values
+```
 #Checking for Null Value in daily Activity
 map(dailyActivity, ~sum(is.na(.)))
 map(sleepDay, ~sum(is.na(.)))
@@ -98,10 +112,10 @@ map(dailyCalories, ~sum(is.na(.)))
 #Replacing the Null Value found in Fat Column of WeightLogInfo with mean
 weightLogInfo$Fat[is.na(weightLogInfo$Fat)] <- mean(weightLogInfo$Fat, na.rm = TRUE)
 head(weightLogInfo)
+```
 
-
-
-
+Merging tables 
+```
 #Merging Daily Activity with dailyIntensities, dailysteps,  SleepDay and WeightLogInfo
 activity<-sqldf("SELECT
 da.Id,
@@ -217,7 +231,12 @@ FROM
 final_activity_data a, dailyIntensities di
 WHERE
 a.Date=di.Date AND a.Id=di.Id")
-
+```
+Exctracting Data to Visualise 
+```
 write.csv(final_activity_data,"D:\\final_activity_data.csv")
+```
+# Tableau Dashboard
 
+Visualizations built in a dashboard.
 ![Dashboard bella](https://user-images.githubusercontent.com/53640666/161537430-e19cf027-58b7-4c34-8e63-0a24d755f41a.png)
